@@ -9,6 +9,7 @@ import (
 
 	"github.com/bbrugger/ebidefender/static/sprites"
 	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/inpututil"
 )
 
 const (
@@ -32,11 +33,7 @@ type Animation struct {
 }
 
 func (a *Animation) getCurrentImage() *ebiten.Image {
-	img, _ := ebiten.NewImageFromImage(
-		a.sprSheet.SubImage(a.frames[a.currentFrame].rect),
-		ebiten.FilterDefault,
-	)
-	return img
+	return a.sprSheet.SubImage(a.frames[a.currentFrame].rect).(*ebiten.Image)
 }
 
 func (a *Animation) update() {
@@ -143,10 +140,31 @@ func init() {
 	initHero()
 }
 
-func (g *Game) Update(screen *ebiten.Image) error {
-	if !g.inited {
-		g.inited = true
+func processInputs() {
+	if inpututil.IsKeyJustPressed(ebiten.KeyUp) {
+		if hero.position.Y > 0 {
+			hero.position.Y--
+		}
 	}
+	if inpututil.IsKeyJustPressed(ebiten.KeyDown) {
+		if hero.position.Y < board.height-1 {
+			hero.position.Y++
+		}
+	}
+	if inpututil.IsKeyJustPressed(ebiten.KeyLeft) {
+		if hero.position.X > 0 {
+			hero.position.X--
+		}
+	}
+	if inpututil.IsKeyJustPressed(ebiten.KeyRight) {
+		if hero.position.X < board.width-1 {
+			hero.position.X++
+		}
+	}
+}
+
+func (g *Game) Update(screen *ebiten.Image) error {
+	processInputs()
 	return nil
 }
 
