@@ -1,24 +1,55 @@
 package main
 
 import (
-	"fmt"
-	"syscall/js"
+	"bytes"
+	"image"
+	_ "image/png"
+	"log"
+
+	"github.com/bbrugger/ebidefender/static/sprites"
+	"github.com/hajimehoshi/ebiten"
 )
 
-func add(this js.Value, i []js.Value) interface{} {
-	return js.ValueOf(i[0].Int() + i[1].Int())
+const (
+	screenWidth  = 800
+	screenHeight = 600
+)
+
+var grassImage *ebiten.Image
+
+func init() {
+	img, _, err := image.Decode(bytes.NewReader(sprites.Grass_32))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	grassImage, _ = ebiten.NewImageFromImage(img, ebiten.FilterDefault)
 }
 
-func registerCallbacks() {
-	js.Global().Set("add", js.FuncOf(add))
+type Game struct {
+	inited bool
+	op     ebiten.DrawImageOptions
+}
+
+func (g *Game) Update(screen *ebiten.Image) error {
+	if !g.inited {
+		g.inited = true
+	}
+	return nil
+}
+
+func (g *Game) Draw(screen *ebiten.Image) {
+	screen.DrawImage(grassImage, &g.op)
+}
+
+func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
+	return screenWidth, screenHeight
 }
 
 func main() {
-	c := make(chan struct{}, 0)
-
-	fmt.Println("Initializing Go WASM...")
-	registerCallbacks()
-	fmt.Println("Go WASM initialized!")
-
-	<-c
+	ebiten.SetWindowSize(screenWidth, screenHeight)
+	ebiten.SetWindowTitle("Ebiten Wasm Test")
+	if err := ebiten.RunGame(&Game{}); err != nil {
+		log.Fatal(err)
+	}
 }
