@@ -79,7 +79,7 @@ var shadowImage *ebiten.Image
 var board Board
 var hero Character
 
-func init() {
+func loadImages() {
 	grassImages = make([]*ebiten.Image, 2)
 	grassSprites := []Sprite{
 		sprites.Grass_32,
@@ -106,7 +106,9 @@ func init() {
 		log.Fatal(err)
 	}
 	shadowImage, _ = ebiten.NewImageFromImage(img, ebiten.FilterDefault)
+}
 
+func initBoard() {
 	board.height = screenHeight / spriteSize
 	board.width = screenWidth / spriteSize
 
@@ -120,7 +122,9 @@ func init() {
 			board.tiles[r][c].floor = grassImages[rand.Intn(len(grassImages))]
 		}
 	}
+}
 
+func initHero() {
 	middleRow := screenHeight / (2 * spriteSize)
 	middleColumn := screenWidth / (2 * spriteSize)
 	hero.position = Position{middleColumn, middleRow}
@@ -131,6 +135,12 @@ func init() {
 			{rect: image.Rectangle{image.Point{64, 0}, image.Point{128, 64}}, duration: 20},
 		},
 	}
+}
+
+func init() {
+	loadImages()
+	initBoard()
+	initHero()
 }
 
 func (g *Game) Update(screen *ebiten.Image) error {
