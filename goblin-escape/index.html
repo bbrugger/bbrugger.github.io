@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Goblin Escape!</title>
+    <script src="bundle.js"></script>
+  </head>
+  <body>
+    <canvas id="2dCanvas">
+      <p class="error message">Unable to load 2d context :(</p>
+      <p class="message">
+        Check if your browser supports it and if you have JavaScript enabled.
+      </p>
+    </canvas>
+  </body>
+  <footer>
+    <style>
+      body {
+        margin: 0;
+        border: 0;
+        overflow: hidden;
+      }
+      canvas {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #95bd73;
+        text-align: center;
+      }
+      .message {
+        font-family: Georgia, "Times New Roman", Times, serif;
+        font-size: 16px;
+        color: #3c3836;
+      }
+      .error {
+        font-size: 32px;
+        color: #cc241d;
+      }
+    </style>
+  </footer>
+</html>
