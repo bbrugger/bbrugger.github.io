@@ -1,12 +1,14 @@
 <html>
-  <script src=server/wasm_exec.js></script>
+  <script src="wasm_exec.js"></script>
   <script>
     const go = new Go();
     let mod, inst;
-    WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(async result => {
-      mod = result.module;
-      inst = result.instance;
-      await go.run(inst)
-    });
+    WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(
+      async (result) => {
+        mod = result.module;
+        inst = result.instance;
+        await go.run(inst);
+      }
+    );
   </script>
 </html>
